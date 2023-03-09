@@ -4,41 +4,64 @@ using System.Numerics;
 Raylib.InitWindow(1500,800, "platformer");
 Raylib.SetTargetFPS(60);
 
-Rectangle Player = new Rectangle(60,60, 60,60);
+Rectangle Player = new Rectangle(60,660, 60,60);
 bool isTouching = false;
 
-List<Rectangle> structure = new();
+Level1 level = new();
 
-structure.Add(new Rectangle(0, 700, 1500, 100));
+
+
+string currentScene = "level1";
 
 float speed = 10;
-float jump = 200;
+float jump = 120;
 float gravity = 5;
 
 
 while(Raylib.WindowShouldClose()==false)
 {
 
+    // Grafik
 
     Raylib.BeginDrawing();
+    if (currentScene == "start"){
+        Raylib.DrawText("Press ENTER to start", 550,300,32, Color.WHITE);
+    }
+
+    else if(currentScene == "level1"){
     Raylib.DrawRectangleRec(Player, Color.WHITE);
-    level(structure);
+    Level(level.structure, level.teleport);
+    }
+
+
     Raylib.EndDrawing();
 
 
-
-    Player.y += gravity;
-
-    if (!Raylib.CheckCollisionRecs(Player, structure[0]))
-    {
-        isTouching = false;
+    // Logik
+    if (currentScene == "start"){
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
+        {
+            currentScene = "level1";
+        }
     }
+    else{
 
-    if (Raylib.CheckCollisionRecs(Player, structure[0] ))
-    {
-        Player.y = structure[0].y-Player.height;
-        isTouching = true;
-    }
+        Player.y += gravity;
+
+        if (!Raylib.CheckCollisionRecs(Player, level.structure[0]))
+        {
+            isTouching = false;
+        }
+        for (var i = 0; i < level.structure.Count; i++)
+        {
+            if (Raylib.CheckCollisionRecs(Player, level.structure[i]))
+            {
+                Player.y = level.structure[i].y-Player.height;
+                isTouching = true;
+            }
+            
+        }
+        }
 
 
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true)
@@ -54,11 +77,20 @@ while(Raylib.WindowShouldClose()==false)
         Player.x += speed;
     }
 
-
 }
 
-static void level(List<Rectangle> structure)
+static void Level(List<Rectangle> structure, List<Rectangle> teleport)
 {
+    
     Raylib.ClearBackground(Color.BLACK);
-    Raylib.DrawRectangleRec(structure[0], Color.RED);
+    Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100,100,24, Color.WHITE);
+    for (var i = 0; i < structure.Count; i++)
+    {
+        Raylib.DrawRectangleRec(structure[i], Color.RED);
+    }
+    for (var i = 0; i < teleport.Count; i++)
+    {
+        Raylib.DrawRectangleRec(teleport[i], Color.GREEN);
+        
+    }
 }
