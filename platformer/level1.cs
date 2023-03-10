@@ -1,0 +1,24 @@
+using System;
+using Raylib_cs;
+
+public class Level1
+{
+    public List<Rectangle> structure = new();
+    public List<Rectangle> teleport = new();
+
+    public Level1()
+    {
+        // Golvet
+        structure.Add(new Rectangle(0, 700, 1500, 100)); 
+        // Plattformer
+        structure.Add(new Rectangle(200, 600, 100, 10));
+        structure.Add(new Rectangle(400, 500, 100, 10));
+        structure.Add(new Rectangle(600, 400, 100, 10));
+        structure.Add(new Rectangle(800, 300, 450, 10));
+
+        // Teleport(duh)
+        teleport.Add(new Rectangle (1300,100, 100,100));
+    }
+    
+
+}
