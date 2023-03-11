@@ -5,7 +5,8 @@ public class Level1
 {
     public List<Rectangle> structure = new();
     public List<Rectangle> teleport = new();
-
+    public List<Rectangle> wall = new();
+    
     public Level1()
     {
         // Golvet

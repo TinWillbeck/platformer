@@ -10,7 +10,7 @@ bool isTouching = false;
 Level1 level1 = new();
 Level2 level2 = new();
 
-string currentScene = "level1";
+string currentScene = "level2";
 bool nextScene = false;
 
 float speed = 10;
@@ -35,17 +35,22 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawRectangleRec(Player, Color.WHITE);
         Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100, 100, 26, Color.WHITE);
 
-        Collision(ref Player, ref isTouching, level1.structure, level1.teleport, nextScene);
-        Level(level1.structure, level1.teleport);
+        collisionFloor(ref Player, ref isTouching, level1.structure, level1.teleport);
+        Level(level1.structure, level1.teleport, level1.wall);
+
+    
     }
 
-    else if (currentScene == "level2"){
+    else if (currentScene == "level2")
+    {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
 
-        Collision(ref Player, ref isTouching, level2.structure, level2.teleport, nextScene);
+        collisionFloor(ref Player, ref isTouching, level2.structure, level2.teleport);
 
-        Level(level2.structure, level2.teleport);
-    }   
+        Level(level2.structure, level2.teleport, level2.wall);
+
+        collisionWall(ref Player, ref isTouching, level2.wall, speed, gravity);
+    }
 
 
     Raylib.EndDrawing();
@@ -67,7 +72,7 @@ while(Raylib.WindowShouldClose()==false)
 
 }
 
-static void Level(List<Rectangle> structure, List<Rectangle> teleport)
+static void Level(List<Rectangle> structure, List<Rectangle> teleport, List<Rectangle> wall)
 {
     
     Raylib.ClearBackground(Color.BLACK);
@@ -78,6 +83,10 @@ static void Level(List<Rectangle> structure, List<Rectangle> teleport)
     for (var i = 0; i < teleport.Count; i++)
     {
         Raylib.DrawRectangleRec(teleport[i], Color.GREEN);
+    }
+    for (int i = 0; i < wall.Count; i++)
+    {
+        Raylib.DrawRectangleRec(wall[i], Color.BLUE);
     }
 }
 
@@ -108,7 +117,7 @@ static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float 
     return Player;
 }
 
-static void Collision(ref Rectangle Player, ref bool isTouching, List<Rectangle> structure, List<Rectangle> teleport, bool nextScene)
+static void collisionFloor(ref Rectangle Player, ref bool isTouching, List<Rectangle> structure, List<Rectangle> teleport)
 {
     isTouching = false;
     for (var i = 0; i < structure.Count; i++)
@@ -121,11 +130,30 @@ static void Collision(ref Rectangle Player, ref bool isTouching, List<Rectangle>
         }
         if (Raylib.CheckCollisionRecs(Player, teleport[0]))
         {
-            nextScene = true;
             Player.x = 60;
             Player.y = 660;
         }
-        
+
     }
-    
+
+}
+
+static void collisionWall(ref Rectangle Player, ref bool isTouching, List<Rectangle> wall, float speed, float gravity)
+{
+    for (int i = 0; i < wall.Count; i++)
+    {
+        if (Raylib.CheckCollisionRecs(Player, wall[i]))
+        {
+            isTouching = true;
+            Player.y -= gravity - 2;
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+            {
+                Player.x += speed;
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+            {
+                Player.x -= speed;
+            }
+        }
+    }
 }
