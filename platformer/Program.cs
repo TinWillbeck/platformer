@@ -45,6 +45,8 @@ while(Raylib.WindowShouldClose()==false)
     else if (currentScene == "level2")
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
+        Raylib.DrawText("Håll A eller D mot blåa väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
+
 
         collisionFloor(ref Player, ref isTouching, level2.structure);
         Level(level2.structure, level2.teleport, level2.wall);
