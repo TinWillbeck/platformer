@@ -10,7 +10,7 @@ bool isTouching = false;
 Level1 level1 = new();
 Level2 level2 = new();
 
-string currentScene = "level2";
+string currentScene = "level1";
 string nextScene = "";
 
 float speed = 10;
@@ -36,46 +36,27 @@ while(Raylib.WindowShouldClose()==false)
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
         Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100, 100, 26, Color.WHITE);
-
-        (Player, isTouching) = CollisionFloor(Player, isTouching, level1.structure);
         DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof);
-        SceneSwitch(ref Player, level1.teleport, ref currentScene, "level2");
+
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed);
+        (Player, currentScene) = SceneSwitch(Player, level1.teleport, currentScene, "level2");
     }
 
     else if (currentScene == "level2")
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
         Raylib.DrawText("Håll A eller D mot blåa väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
-        for (var i = 0; i < level2.block.Count; i++)
-        {
-            if (Raylib.CheckCollisionRecs(Player, level2.block[i]))
-            {
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
-                {
-                    Player.x += speed;
-                }
-                if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
-                {
-                    Player.x -= speed;
-                }
-            }
-        }
-        for (var i = 0; i < level2.roof.Count; i++)
-        {
-            if (Raylib.CheckCollisionRecs(Player, level2.roof[i])){
-                Player.y = level2.roof[i].y+5;
-            }
-        }
-
-        (Player, isTouching) = CollisionFloor(Player, isTouching, level2.structure);
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof);
-        collisionWall(ref Player, ref isTouching, level2.wall, speed, gravity);
 
-        SceneSwitch(ref Player, level2.teleport, ref currentScene, "endScreen");
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
+        Player = StaticCollision(Player, level2, speed);
+        // collisionWall(ref Player, ref isTouching, level2.wall, speed, gravity);
+
+        (Player, currentScene) = SceneSwitch(Player, level2.teleport, currentScene, "endScreen");
 
     }
 
-    
+
 
 
     Raylib.EndDrawing();
@@ -153,7 +134,7 @@ static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float 
     return Player;
 }
 
-static (Rectangle, bool) CollisionFloor(Rectangle Player, bool isTouching, List<Rectangle> structure)
+static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed)
 {
     isTouching = false;
     for (var i = 0; i < structure.Count; i++)
@@ -165,12 +146,6 @@ static (Rectangle, bool) CollisionFloor(Rectangle Player, bool isTouching, List<
             isTouching = true;
         }
     }
-
-    return (Player, isTouching);
-}
-
-static void collisionWall(ref Rectangle Player, ref bool isTouching, List<Rectangle> wall, float speed, float gravity)
-{
     for (int i = 0; i < wall.Count; i++)
     {
         if (Raylib.CheckCollisionRecs(Player, wall[i]))
@@ -187,9 +162,58 @@ static void collisionWall(ref Rectangle Player, ref bool isTouching, List<Rectan
             }
         }
     }
+
+    return (Player, isTouching);
 }
 
-static void SceneSwitch(ref Rectangle Player, List<Rectangle> teleport, ref string currentScene, string nextScene)
+static Rectangle StaticCollision(Rectangle Player, Level2 level2, float speed)
+{
+    for (var i = 0; i < level2.block.Count; i++)
+    {
+        if (Raylib.CheckCollisionRecs(Player, level2.block[i]))
+        {
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+            {
+                Player.x += speed;
+            }
+            if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+            {
+                Player.x -= speed;
+            }
+        }
+    }
+    for (var i = 0; i < level2.roof.Count; i++)
+    {
+        if (Raylib.CheckCollisionRecs(Player, level2.roof[i]))
+        {
+            Player.y = level2.roof[i].y + 5;
+        }
+    }
+
+    return Player;
+}
+
+// static void collisionWall(ref Rectangle Player, ref bool isTouching, List<Rectangle> wall, float speed, float gravity)
+// {
+//     for (int i = 0; i < wall.Count; i++)
+//     {
+//         if (Raylib.CheckCollisionRecs(Player, wall[i]))
+//         {
+//             isTouching = true;
+//             Player.y -= gravity - 2;
+//             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
+//             {
+//                 Player.x += speed;
+//             }
+//             if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
+//             {
+//                 Player.x -= speed;
+//             }
+//         }
+//     }
+// }
+
+static (Rectangle, string) SceneSwitch(Rectangle Player, List<Rectangle> teleport, string currentScene, string nextScene)
 {
     if (Raylib.CheckCollisionRecs(Player, teleport[0]))
     {
@@ -197,4 +221,5 @@ static void SceneSwitch(ref Rectangle Player, List<Rectangle> teleport, ref stri
         Player.y = 660;
         currentScene = nextScene;
     }
+    return(Player, currentScene);
 }
