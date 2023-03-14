@@ -12,7 +12,8 @@ public class testlvl
 
     public testlvl(){
         // Golvet
-        structure.Add(new Rectangle(0, 700, 1500, 100)); 
+        structure.Add(new Rectangle(0, 700, 900, 100)); 
+        structure.Add(new Rectangle(1000, 700, 500, 100)); 
         // Plattformer
         structure.Add(new Rectangle(600, 600, 100, 10));
         structure.Add(new Rectangle(500, 390, 100, 10));

@@ -40,7 +40,7 @@ while(Raylib.WindowShouldClose()==false)
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, testlvl.structure, testlvl.wall, gravity, speed);
         Player = StaticCollision(Player, testlvl.block, testlvl.roof, speed);
-        (Player, currentScene) = SceneSwitch(Player, testlvl.teleport, currentScene, "endScreen");
+        (Player, currentScene) = tpCollision(Player, testlvl.teleport, currentScene, "endScreen", testlvl.killFloor);
     }
     else if(currentScene == "level1")
     {
@@ -49,7 +49,7 @@ while(Raylib.WindowShouldClose()==false)
         DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof,level1.killFloor);
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed);
-        (Player, currentScene) = SceneSwitch(Player, level1.teleport, currentScene, "level2");
+        (Player, currentScene) = tpCollision(Player, level1.teleport, currentScene, "level2", level1.killFloor);
     }
     else if (currentScene == "level2")
     {
@@ -59,7 +59,7 @@ while(Raylib.WindowShouldClose()==false)
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
-        (Player, currentScene) = SceneSwitch(Player, level2.teleport, currentScene, "endScreen");
+        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
     }
 
     Raylib.EndDrawing();
@@ -201,13 +201,19 @@ static Rectangle StaticCollision(Rectangle Player, List<Rectangle> block, List<R
     return Player;
 }
 
-static (Rectangle, string) SceneSwitch(Rectangle Player, List<Rectangle> teleport, string currentScene, string nextScene)
+static (Rectangle, string) tpCollision(Rectangle Player, List<Rectangle> teleport, string currentScene, string nextScene, List<Rectangle> killFloor)
 {
     if (Raylib.CheckCollisionRecs(Player, teleport[0]))
     {
-        Player.x = 60;
-        Player.y = 660;
         currentScene = nextScene;
+    }
+
+    for (var i = 0; i < killFloor.Count; i++)
+    {
+        if (Raylib.CheckCollisionRecs(Player, killFloor[i])){
+            Player.x = 60;
+            Player.y = 660;
+        }
     }
     return(Player, currentScene);
 }
