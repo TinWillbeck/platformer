@@ -8,6 +8,7 @@ public class Level1
     public List<Rectangle> wall = new();
     public List <Rectangle> block = new();
     public List <Rectangle> roof = new();
+    public List <Rectangle> killFloor = new();
     
     public Level1()
     {
