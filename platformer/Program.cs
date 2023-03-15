@@ -47,8 +47,10 @@ while(Raylib.WindowShouldClose()==false)
     else if(currentScene == "level1")
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
+        
         DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof,level1.killFloor);
-        Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100, 100, 26, Color.WHITE);
+        Raylib.DrawText("Använd W/space, A, D för att flytta den vita kuben.", 100, 100, 26, Color.WHITE);
+        Raylib.DrawText("Ta dig till gröna kuben för att gå till nästa nivå.", 110, 150, 26, Color.WHITE);
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed);
         (Player, currentScene) = tpCollision(Player, level1.teleport, currentScene, "level2", level1.killFloor);
@@ -64,6 +66,15 @@ while(Raylib.WindowShouldClose()==false)
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
         (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+    }
+    else if (currentScene == "level3")
+    {
+        Raylib.DrawRectangleRec(Player,Color.WHITE);
+
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
+        Player = StaticCollision(Player, level2.block, level2.roof, speed);
+        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+
     }
 
     Raylib.EndDrawing();
@@ -121,7 +132,7 @@ static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<
 
 static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float jump)
 {
-    if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true)
+    if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
     {
         Player.y -= jump;
     }

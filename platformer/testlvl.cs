@@ -33,3 +33,33 @@ public class testlvl
     }
 }
 
+// Level template:
+
+// using Raylib_cs;
+
+// public class levelx
+// {
+//     public List<Rectangle> structure = new();
+//     public List<Rectangle> teleport = new();
+//     public List<Rectangle> wall = new();
+//     public List <Rectangle> block = new();
+//     public List <Rectangle> roof = new();
+//     public List <Rectangle> killFloor = new();
+
+//     public levelx(){
+//         // Golvet
+
+//         // Plattformer
+
+//         // Tak
+
+//         // Väggar
+
+//         // Block
+
+//         // Killfloor (Golv som TPar spelaren till början av leveln)
+
+//         // Teleport(duh)
+        
+//     }
+// }
