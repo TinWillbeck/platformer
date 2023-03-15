@@ -11,7 +11,7 @@ Level1 level1 = new();
 Level2 level2 = new();
 testlvl testlvl = new();
 
-string currentScene = "level2";
+string currentScene = "start";
 
 float speed = 10;
 float jump = 120;
@@ -29,9 +29,12 @@ while(Raylib.WindowShouldClose()==false)
     if (currentScene == "start"){
         Raylib.DrawText("Press ENTER to start", 550,300,32, Color.WHITE);
         Raylib.DrawText("Press ESC at any time to quit the game", 500,400,24, Color.WHITE);
+        Raylib.ClearBackground(Color.BLACK);
     }
     else if (currentScene == "endScreen"){
         Raylib.DrawText("GG hoppas jag får godkänt!", 550,300,32,Color.WHITE);
+        Raylib.ClearBackground(Color.BLACK);
+
     }
     else if (currentScene == "test"){
         Raylib.DrawRectangleRec(Player, Color.WHITE);
@@ -56,6 +59,7 @@ while(Raylib.WindowShouldClose()==false)
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Klicka W när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
+        Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
@@ -129,6 +133,12 @@ static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float 
     {
         Player.x += speed;
     }
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_R))
+    {
+        Player.x = 60;
+        Player.y = 660;
+    }
+
 
 
     if (Player.x <= -10)
@@ -206,9 +216,10 @@ static (Rectangle, string) tpCollision(Rectangle Player, List<Rectangle> telepor
 {
     if (Raylib.CheckCollisionRecs(Player, teleport[0]))
     {
-        currentScene = nextScene;
         Player.x = 60;
         Player.y = 660;
+        currentScene = nextScene;
+        
     }
 
     for (var i = 0; i < killFloor.Count; i++)
