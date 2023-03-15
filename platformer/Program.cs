@@ -11,8 +11,7 @@ Level1 level1 = new();
 Level2 level2 = new();
 testlvl testlvl = new();
 
-string currentScene = "test";
-string nextScene = "";
+string currentScene = "level2";
 
 float speed = 10;
 float jump = 120;
@@ -40,13 +39,13 @@ while(Raylib.WindowShouldClose()==false)
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, testlvl.structure, testlvl.wall, gravity, speed);
         Player = StaticCollision(Player, testlvl.block, testlvl.roof, speed);
-        (Player, currentScene) = tpCollision(Player, testlvl.teleport, currentScene, "endScreen", testlvl.killFloor);
+        (Player, currentScene) = tpCollision(Player, testlvl.teleport, currentScene, "start", testlvl.killFloor);
     }
     else if(currentScene == "level1")
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
-        Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100, 100, 26, Color.WHITE);
         DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof,level1.killFloor);
+        Raylib.DrawText("Använd W, A, D för att flytta den vita kuben. Ta dig till gröna kuben för att gå till nästa nivå.", 100, 100, 26, Color.WHITE);
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed);
         (Player, currentScene) = tpCollision(Player, level1.teleport, currentScene, "level2", level1.killFloor);
@@ -54,8 +53,9 @@ while(Raylib.WindowShouldClose()==false)
     else if (currentScene == "level2")
     {
         Raylib.DrawRectangleRec(Player, Color.WHITE);
-        Raylib.DrawText("Håll A eller D mot blåa väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
+        Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
+        Raylib.DrawText("Klicka W när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
@@ -129,6 +129,7 @@ static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float 
     {
         Player.x += speed;
     }
+
 
     if (Player.x <= -10)
     {
@@ -206,6 +207,8 @@ static (Rectangle, string) tpCollision(Rectangle Player, List<Rectangle> telepor
     if (Raylib.CheckCollisionRecs(Player, teleport[0]))
     {
         currentScene = nextScene;
+        Player.x = 60;
+        Player.y = 660;
     }
 
     for (var i = 0; i < killFloor.Count; i++)

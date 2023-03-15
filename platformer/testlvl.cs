@@ -26,7 +26,7 @@ public class testlvl
         wall.Add(new Rectangle (300, 200, 100, 300));
         // Block
         block.Add(new Rectangle(100, 110, 100, 490));
-        // Golv som TPar spelaren till början av leveln
+        // Killfloor (Golv som TPar spelaren till början av leveln)
         killFloor.Add(new Rectangle(900, 700, 100, 100));
         // Teleport(duh)
         teleport.Add(new Rectangle (1300,600, 100,100));
