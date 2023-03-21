@@ -12,13 +12,13 @@ Level1 level1 = new();
 Level2 level2 = new();
 Level2 level3 = new();
 
-string currentScene = "level2";
+string currentScene = "test";
 
 float speed = 10;
-float jump = 4;
-float maxJump = 120;
-float gravity = 0.5f;
-float maxGravity = 5;
+float jump = -100;
+// Jump ska ligga på 120 när de klart
+float velocity = 0;
+float gravity = 0.3f;
 
 
 
@@ -111,10 +111,7 @@ while(Raylib.WindowShouldClose()==false)
     }
     else
     {
-        
-        Player.y += gravity;
-
-        Player = Movement(Player, isTouching, speed, jump, maxJump);
+        (Player, velocity) = Movement(Player, isTouching, speed, jump, velocity, gravity);
     }
 
 }
@@ -156,16 +153,19 @@ static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<
     }
 }
 
-static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float jump, float maxJump)
+static (Rectangle, float) Movement(Rectangle Player, bool isTouching, float speed, float jump, float velocity, float gravity)
 {
-    if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
+
+    Player.y += velocity;
+    velocity += gravity;
+    if (isTouching == true)
     {
-        // if (jump != maxJump){
-        //     jump = jump+2;
-            Player.y -= maxJump;
-        // }
-        
-        
+        velocity = 0;
+    }
+
+    if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
+    {     
+        velocity = jump;
     }
     if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
     {
@@ -192,7 +192,7 @@ static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float 
         Player.x -= speed;
     }
 
-    return Player;
+    return (Player, velocity);
 }
 
 static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed)
@@ -203,7 +203,7 @@ static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List
 
         if (Raylib.CheckCollisionRecs(Player, structure[i]))
         {
-            Player.y = structure[i].y - Player.height;
+            Player.y = structure[i].y - Player.height+5;
             isTouching = true;
         }
     }
