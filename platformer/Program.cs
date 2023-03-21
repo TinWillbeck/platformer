@@ -7,16 +7,38 @@ Raylib.SetTargetFPS(60);
 Rectangle Player = new Rectangle(60,660, 60,65);
 bool isTouching = false;
 
+testlvl testlvl = new();
 Level1 level1 = new();
 Level2 level2 = new();
-testlvl testlvl = new();
+Level2 level3 = new();
 
-string currentScene = "start";
+string currentScene = "level2";
 
 float speed = 10;
-float jump = 120;
-float gravity = 5;
+float jump = 4;
+float maxJump = 120;
+float gravity = 0.5f;
+float maxGravity = 5;
 
+
+
+// static int jumpMechanics(int maxSpeed, int minSpeed, float jump1, Vector2 characterVec, Rectangle player){
+// minSpeed = 15;
+// maxSpeed = -15;
+// jump1 = 0.9f;
+// Player.y = characterVec.Y;
+
+// characterVec.Y = maxSpeed;
+
+// characterVec.Y*=speed;
+
+// if (characterVec.Y < 0.5)
+// {
+//     speed*=-1;
+// }
+
+// return (int)Player.y;
+// }
 
 
 while(Raylib.WindowShouldClose()==false)
@@ -65,7 +87,7 @@ while(Raylib.WindowShouldClose()==false)
 
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
-        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreelevel3", level2.killFloor);
     }
     else if (currentScene == "level3")
     {
@@ -74,7 +96,6 @@ while(Raylib.WindowShouldClose()==false)
         (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
         (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
-
     }
 
     Raylib.EndDrawing();
@@ -90,9 +111,10 @@ while(Raylib.WindowShouldClose()==false)
     }
     else
     {
+        
         Player.y += gravity;
 
-        Player = Movement(Player, isTouching, speed, jump);
+        Player = Movement(Player, isTouching, speed, jump, maxJump);
     }
 
 }
@@ -130,11 +152,16 @@ static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<
     }
 }
 
-static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float jump)
+static Rectangle Movement(Rectangle Player, bool isTouching, float speed, float jump, float maxJump)
 {
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
     {
-        Player.y -= jump;
+        // if (jump != maxJump){
+        //     jump = jump+2;
+            Player.y -= maxJump;
+        // }
+        
+        
     }
     if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
     {
