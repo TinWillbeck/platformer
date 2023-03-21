@@ -122,6 +122,10 @@ while(Raylib.WindowShouldClose()==false)
 
 // metoder
 
+// Gör så gravitationen ökar exponentiellt när karaktären är i luften
+// Gör så man får en spurt uppåt när man trycker på W/ space(vector2 på nnågot vis)
+
+
 static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<Rectangle> wall, List<Rectangle> block, List<Rectangle> roof, List<Rectangle> killFloor)
 {
     
