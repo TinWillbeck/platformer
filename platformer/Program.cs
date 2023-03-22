@@ -15,30 +15,9 @@ Level2 level3 = new();
 string currentScene = "test";
 
 float speed = 10;
-float jump = -100;
-// Jump ska ligga på 120 när de klart
+float jump = -10;
 float velocity = 0;
 float gravity = 0.3f;
-
-
-
-// static int jumpMechanics(int maxSpeed, int minSpeed, float jump1, Vector2 characterVec, Rectangle player){
-// minSpeed = 15;
-// maxSpeed = -15;
-// jump1 = 0.9f;
-// Player.y = characterVec.Y;
-
-// characterVec.Y = maxSpeed;
-
-// characterVec.Y*=speed;
-
-// if (characterVec.Y < 0.5)
-// {
-//     speed*=-1;
-// }
-
-// return (int)Player.y;
-// }
 
 
 while(Raylib.WindowShouldClose()==false)
@@ -62,7 +41,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawRectangleRec(Player, Color.WHITE);
         DrawLevel(testlvl.structure, testlvl.teleport, testlvl.wall, testlvl.block, testlvl.roof,testlvl.killFloor);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, testlvl.structure, testlvl.wall, gravity, speed);
+        (Player, isTouching) = ActiveCollision(Player, isTouching, testlvl.structure, testlvl.wall, gravity, speed, velocity);
         Player = StaticCollision(Player, testlvl.block, testlvl.roof, speed);
         (Player, currentScene) = tpCollision(Player, testlvl.teleport, currentScene, "start", testlvl.killFloor);
     }
@@ -74,7 +53,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawText("Använd W/space, A, D för att flytta den vita kuben.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Ta dig till gröna kuben för att gå till nästa nivå.", 110, 150, 26, Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed);
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed, velocity);
         (Player, currentScene) = tpCollision(Player, level1.teleport, currentScene, "level2", level1.killFloor);
     }
     else if (currentScene == "level2")
@@ -85,7 +64,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawText("Klicka W när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
         Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
         (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreelevel3", level2.killFloor);
     }
@@ -93,13 +72,12 @@ while(Raylib.WindowShouldClose()==false)
     {
         Raylib.DrawRectangleRec(Player,Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed);
+        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         Player = StaticCollision(Player, level2.block, level2.roof, speed);
         (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
     }
 
     Raylib.EndDrawing();
-
 
     // Logik, i princip bara gubbens rörelse samt att man kan starta spelet
 
@@ -113,6 +91,7 @@ while(Raylib.WindowShouldClose()==false)
     {
         (Player, velocity) = Movement(Player, isTouching, speed, jump, velocity, gravity);
     }
+
 
 }
 
@@ -156,15 +135,10 @@ static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<
 static (Rectangle, float) Movement(Rectangle Player, bool isTouching, float speed, float jump, float velocity, float gravity)
 {
 
-    Player.y += velocity;
-    velocity += gravity;
-    if (isTouching == true)
-    {
-        velocity = 0;
-    }
 
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
-    {     
+    {   
+        isTouching = false;
         velocity = jump;
     }
     if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
@@ -181,6 +155,12 @@ static (Rectangle, float) Movement(Rectangle Player, bool isTouching, float spee
         Player.y = 660;
     }
 
+    velocity += gravity;
+    Player.y += velocity;
+    if (isTouching == true)
+    {
+        velocity = 0;
+    }
 
 
     if (Player.x <= -10)
@@ -195,7 +175,7 @@ static (Rectangle, float) Movement(Rectangle Player, bool isTouching, float spee
     return (Player, velocity);
 }
 
-static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed)
+static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed, float velocity)
 {
     isTouching = false;
     for (var i = 0; i < structure.Count; i++)
@@ -203,8 +183,8 @@ static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List
 
         if (Raylib.CheckCollisionRecs(Player, structure[i]))
         {
-            Player.y = structure[i].y - Player.height+5;
             isTouching = true;
+            Player.y = structure[i].y - Player.height+5;
         }
     }
     for (int i = 0; i < wall.Count; i++)
@@ -213,6 +193,7 @@ static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List
         {
             isTouching = true;
             Player.y -= gravity - 2;
+            // velocity = 2;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
                 Player.x += speed;
@@ -247,7 +228,7 @@ static Rectangle StaticCollision(Rectangle Player, List<Rectangle> block, List<R
     {
         if (Raylib.CheckCollisionRecs(Player, roof[i]))
         {
-            Player.y = roof[i].y + 5;
+            Player.y = roof[i].y + Player.height+10;
         }
     }
 
