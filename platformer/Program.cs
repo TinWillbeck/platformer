@@ -1,10 +1,9 @@
 ﻿using Raylib_cs;
-using System.Numerics;
 
 Raylib.InitWindow(1500,800, "platformer");
 Raylib.SetTargetFPS(60);
 
-Rectangle Player = new Rectangle(60,660, 60,65);
+Rectangle player = new Rectangle(60,660, 60,65);
 bool isTouching = false;
 
 testlvl testlvl = new();
@@ -12,10 +11,10 @@ Level1 level1 = new();
 Level2 level2 = new();
 Level2 level3 = new();
 
-string currentScene = "test";
+string currentScene = "start";
 
 float speed = 10;
-float jump = -10;
+float jump = -8.5f;
 float velocity = 0;
 float gravity = 0.3f;
 
@@ -23,58 +22,70 @@ float gravity = 0.3f;
 while(Raylib.WindowShouldClose()==false)
 {
 
-    // Här ritas leveln ut och all collision kollas,dvs golv, tak, väggar samt teleport till nästa level
-    
+    // Här ritas leveln ut och all collision kollas,dvs golv, tak, väggar samt teleport till nästa level.
+    // I varje level finns bakgrunden, spelaren, utritade objekt samt kollision för objekten.
+
     Raylib.BeginDrawing();
 
+    // Rita start scen
     if (currentScene == "start"){
         Raylib.DrawText("Press ENTER to start", 550,300,32, Color.WHITE);
         Raylib.DrawText("Press ESC at any time to quit the game", 500,400,24, Color.WHITE);
         Raylib.ClearBackground(Color.BLACK);
     }
+
+    // Rita slut scen
     else if (currentScene == "endScreen"){
         Raylib.DrawText("GG hoppas jag får godkänt!", 550,300,32,Color.WHITE);
         Raylib.ClearBackground(Color.BLACK);
 
     }
+
+    // Rita test level som jag använde för att prova fysiken bland annat
     else if (currentScene == "test"){
-        Raylib.DrawRectangleRec(Player, Color.WHITE);
+        Raylib.DrawRectangleRec(player, Color.WHITE);
         DrawLevel(testlvl.structure, testlvl.teleport, testlvl.wall, testlvl.block, testlvl.roof,testlvl.killFloor);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, testlvl.structure, testlvl.wall, gravity, speed, velocity);
-        Player = StaticCollision(Player, testlvl.block, testlvl.roof, speed);
-        (Player, currentScene) = tpCollision(Player, testlvl.teleport, currentScene, "start", testlvl.killFloor);
+        (player, isTouching) = ActiveCollision(player, isTouching, testlvl.structure, testlvl.wall, gravity, speed, velocity);
+        (player, velocity) = StaticCollision(player, testlvl.block, testlvl.roof, speed, velocity);
+        (player, currentScene) = tpCollision(player, testlvl.teleport, currentScene, "start", testlvl.killFloor);
     }
+
+    // Rita level 1
     else if(currentScene == "level1")
     {
-        Raylib.DrawRectangleRec(Player, Color.WHITE);
+        
+        Raylib.DrawRectangleRec(player, Color.WHITE);
         
         DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof,level1.killFloor);
         Raylib.DrawText("Använd W/space, A, D för att flytta den vita kuben.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Ta dig till gröna kuben för att gå till nästa nivå.", 110, 150, 26, Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level1.structure, level1.wall, gravity, speed, velocity);
-        (Player, currentScene) = tpCollision(Player, level1.teleport, currentScene, "level2", level1.killFloor);
+        (player, isTouching) = ActiveCollision(player, isTouching, level1.structure, level1.wall, gravity, speed, velocity);
+        (player, currentScene) = tpCollision(player, level1.teleport, currentScene, "level2", level1.killFloor);
     }
+
+    // Rita level 2
     else if (currentScene == "level2")
     {
-        Raylib.DrawRectangleRec(Player, Color.WHITE);
+        Raylib.DrawRectangleRec(player, Color.WHITE);
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Klicka W när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
         Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
-        Player = StaticCollision(Player, level2.block, level2.roof, speed);
-        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreelevel3", level2.killFloor);
+        (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
+        (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
+        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "level3", level2.killFloor);
     }
+    // Rita level 3
     else if (currentScene == "level3")
     {
-        Raylib.DrawRectangleRec(Player,Color.WHITE);
+        Raylib.DrawRectangleRec(player,Color.WHITE);
 
-        (Player, isTouching) = ActiveCollision(Player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
-        Player = StaticCollision(Player, level2.block, level2.roof, speed);
-        (Player, currentScene) = tpCollision(Player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+        (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
+        (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
+        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "endScreen", level2.killFloor);
     }
 
     Raylib.EndDrawing();
@@ -89,23 +100,26 @@ while(Raylib.WindowShouldClose()==false)
     }
     else
     {
-        (Player, velocity) = Movement(Player, isTouching, speed, jump, velocity, gravity);
+        (player, velocity) = Movement(player, isTouching, speed, jump, velocity, gravity);
     }
 
-
+    
 }
 
 
 // metoder
 
+// IDE FÖR MJUKARE HOPP
 // Gör så gravitationen ökar exponentiellt när karaktären är i luften
 // Gör så man får en spurt uppåt när man trycker på W/ space(vector2 på nnågot vis)
 
 
+// Ritar ut alla objekt förutom spelaren
 static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<Rectangle> wall, List<Rectangle> block, List<Rectangle> roof, List<Rectangle> killFloor)
 {
-    
+    // rita bakgrund
     Raylib.ClearBackground(Color.BLACK);
+    // ritar ut alla objekt av olika typ resten av metoden
     for (var i = 0; i < structure.Count; i++)
     {
         Raylib.DrawRectangleRec(structure[i], Color.RED);
@@ -132,125 +146,143 @@ static void DrawLevel(List<Rectangle> structure, List<Rectangle> teleport, List<
     }
 }
 
-static (Rectangle, float) Movement(Rectangle Player, bool isTouching, float speed, float jump, float velocity, float gravity)
+// Gör så spelaren kan röra på sig
+static (Rectangle, float) Movement(Rectangle player, bool isTouching, float speed, float jump, float velocity, float gravity)
 {
 
-
+    // gör så spelaren kan hoppa om den trycker på W/space
+    // gör direkt så isTouching är falskt för att annars fungerade det inte utan att spelaren TPades uppåt.
     if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
     {   
         isTouching = false;
         velocity = jump;
     }
+    // spelaren kan gå åt vänster
     if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
     {
-        Player.x -= speed;
+        player.x -= speed;
     }
+    // spelaren kan gå åt höger
     if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
     {
-        Player.x += speed;
+        player.x += speed;
     }
+    // spelaren kan TPa till början av leveln
     if (Raylib.IsKeyDown(KeyboardKey.KEY_R))
     {
-        Player.x = 60;
-        Player.y = 660;
+        player.x = 60;
+        player.y = 660;
     }
 
+    // Gör hoppen mjukare
     velocity += gravity;
-    Player.y += velocity;
+    player.y += velocity;
     if (isTouching == true)
     {
         velocity = 0;
     }
 
-
-    if (Player.x <= -10)
+    // gör så spelaren inte kan gå utanför leveln
+    if (player.x <= -10)
     {
-        Player.x += speed;
+        player.x += speed;
     }
-    if (Player.x >= 1450)
+    if (player.x >= 1450)
     {
-        Player.x -= speed;
+        player.x -= speed;
     }
 
-    return (Player, velocity);
+    return (player, velocity);
 }
 
-static (Rectangle, bool) ActiveCollision(Rectangle Player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed, float velocity)
+// Aktiv kollision som jag har kallat det innebär att när spelaren nuddar detta objekt så har den förmågan att hoppa. 
+// Detta kollas med boolen isTouching som är sann om spelaren nuddar något av objekten i listan.
+
+static (Rectangle, bool) ActiveCollision(Rectangle player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed, float velocity)
 {
     isTouching = false;
+// Kollisionen i övrigt fungerar så att om spelaren och objektet nuddar varandra så ändras dens position på något vis.
+// För golv så blir spelarens Y koordinat minskad med spelarens höjd + 5 pixlar(eftersom spelaren är 65px lång så blir den en jämn och fin kub när den nuddar marken)
+
     for (var i = 0; i < structure.Count; i++)
     {
 
-        if (Raylib.CheckCollisionRecs(Player, structure[i]))
+        if (Raylib.CheckCollisionRecs(player, structure[i]))
         {
             isTouching = true;
-            Player.y = structure[i].y - Player.height+5;
+            player.y = structure[i].y - player.height+5;
         }
     }
+// För väggar så blir spelarens X koordinat minskad eller ökad med speed beroende på vilken tangent man håller in
+// När man håller in A mot en vägg så kommer spelarens x öka med speed, vilket motverkar hur den normalt rör på sig. Motsatt för D.
+// När man dessutom är i kontakt med väggen så fallen spelaren långsammare.
     for (int i = 0; i < wall.Count; i++)
     {
-        if (Raylib.CheckCollisionRecs(Player, wall[i]))
+        if (Raylib.CheckCollisionRecs(player, wall[i]))
         {
             isTouching = true;
-            Player.y -= gravity - 2;
-            // velocity = 2;
+            player.y -= gravity - 2;
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
-                Player.x += speed;
+                player.x += speed;
             }
             if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
-                Player.x -= speed;
+                player.x -= speed;
+            }
+            if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
+            {   
+                player.y -= 70;
             }
         }
     }
 
-    return (Player, isTouching);
+    return (player, isTouching);
 }
 
-static Rectangle StaticCollision(Rectangle Player, List<Rectangle> block, List<Rectangle> roof, float speed)
+static (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block, List<Rectangle> roof, float speed, float velocity)
 {
     for (var i = 0; i < block.Count; i++)
     {
-        if (Raylib.CheckCollisionRecs(Player, block[i]))
+        if (Raylib.CheckCollisionRecs(player, block[i]))
         {
             if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
             {
-                Player.x += speed;
+                player.x += speed;
             }
             if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
-                Player.x -= speed;
+                player.x -= speed;
             }
         }
     }
     for (var i = 0; i < roof.Count; i++)
     {
-        if (Raylib.CheckCollisionRecs(Player, roof[i]))
+        if (Raylib.CheckCollisionRecs(player, roof[i]))
         {
-            Player.y = roof[i].y + Player.height+10;
+            player.y = roof[i].y + 10;
+            velocity = 0;
         }
     }
-
-    return Player;
+    return (player, velocity);
 }
 
-static (Rectangle, string) tpCollision(Rectangle Player, List<Rectangle> teleport, string currentScene, string nextScene, List<Rectangle> killFloor)
+static (Rectangle, string) tpCollision(Rectangle player, List<Rectangle> teleport, string currentScene, string nextScene, List<Rectangle> killFloor)
 {
-    if (Raylib.CheckCollisionRecs(Player, teleport[0]))
+    if (Raylib.CheckCollisionRecs(player, teleport[0]))
     {
-        Player.x = 60;
-        Player.y = 660;
+        player.x = 60;
+        player.y = 660;
         currentScene = nextScene;
         
     }
 
     for (var i = 0; i < killFloor.Count; i++)
     {
-        if (Raylib.CheckCollisionRecs(Player, killFloor[i])){
-            Player.x = 60;
-            Player.y = 660;
+        if (Raylib.CheckCollisionRecs(player, killFloor[i])){
+            player.x = 60;
+            player.y = 660;
         }
     }
-    return(Player, currentScene);
+    return(player, currentScene);
 }

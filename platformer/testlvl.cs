@@ -3,6 +3,8 @@ using Raylib_cs;
 
 public class testlvl
 {
+    // Använder mig av listor för att jag vet ej hur många ojbekt jag vill ha i varje level, darför fungerar lisot bättre
+
     public List<Rectangle> structure = new();
     public List<Rectangle> teleport = new();
     public List<Rectangle> wall = new();
@@ -28,7 +30,7 @@ public class testlvl
         block.Add(new Rectangle(100, 110, 100, 490));
         // Killfloor (Golv som TPar spelaren till början av leveln)
         killFloor.Add(new Rectangle(900, 700, 100, 100));
-        // Teleport(duh)
+        // Teleport
         teleport.Add(new Rectangle (1300,600, 100,100));
     }
 }
