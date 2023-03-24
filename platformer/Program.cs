@@ -9,9 +9,9 @@ bool isTouching = false;
 testlvl testlvl = new();
 Level1 level1 = new();
 Level2 level2 = new();
-Level2 level3 = new();
+Level3 level3 = new();
 
-string currentScene = "start";
+string currentScene = "level3";
 
 float speed = 10;
 float jump = -8.5f;
@@ -76,16 +76,17 @@ while(Raylib.WindowShouldClose()==false)
 
         (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
-        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "level3", level2.killFloor);
+        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "endScreen", level2.killFloor);
     }
     // Rita level 3
     else if (currentScene == "level3")
     {
         Raylib.DrawRectangleRec(player,Color.WHITE);
+        DrawLevel(level3.structure, level3.teleport, level3.wall,level3.block,level3.roof,level3.killFloor);
 
-        (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
-        (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
-        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+        (player, isTouching) = ActiveCollision(player, isTouching, level3.structure, level3.wall, gravity, speed, velocity);
+        (player, velocity) = StaticCollision(player, level3.block, level3.roof, speed, velocity);
+        (player, currentScene) = tpCollision(player, level3.teleport, currentScene, "endScreen", level3.killFloor);
     }
 
     Raylib.EndDrawing();
