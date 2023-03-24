@@ -71,7 +71,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawRectangleRec(player, Color.WHITE);
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
-        Raylib.DrawText("Klicka W när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
+        Raylib.DrawText("Hoppa när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
         Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
 
         (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
@@ -240,8 +240,10 @@ static (Rectangle, bool) ActiveCollision(Rectangle player, bool isTouching, List
     return (player, isTouching);
 }
 
+// Kollision där spelaren inte får förmågan att hoppa
 static (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block, List<Rectangle> roof, float speed, float velocity)
 {
+    // Kollision för väggar
     for (var i = 0; i < block.Count; i++)
     {
         if (Raylib.CheckCollisionRecs(player, block[i]))
@@ -256,6 +258,7 @@ static (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block
             }
         }
     }
+    // Kollision för tak
     for (var i = 0; i < roof.Count; i++)
     {
         if (Raylib.CheckCollisionRecs(player, roof[i]))
@@ -267,8 +270,10 @@ static (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block
     return (player, velocity);
 }
 
+// Kollision som TPar spelaren till en annan plats, nästa level eller startpunkten
 static (Rectangle, string) tpCollision(Rectangle player, List<Rectangle> teleport, string currentScene, string nextScene, List<Rectangle> killFloor)
 {
+    // TP till nästa level
     if (Raylib.CheckCollisionRecs(player, teleport[0]))
     {
         player.x = 60;
@@ -277,6 +282,7 @@ static (Rectangle, string) tpCollision(Rectangle player, List<Rectangle> telepor
         
     }
 
+    // TP till början av leveln
     for (var i = 0; i < killFloor.Count; i++)
     {
         if (Raylib.CheckCollisionRecs(player, killFloor[i])){
