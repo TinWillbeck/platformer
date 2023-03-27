@@ -4,11 +4,17 @@ using Raylib_cs;
 public class Level1
 {
     // Använder mig av listor för att jag vet ej hur många ojbekt jag vill ha i varje level, darför fungerar lisot bättre
+    // Golv
     public List<Rectangle> structure = new();
+    // Teleports
     public List<Rectangle> teleport = new();
+    // Väggar man kan klättra på
     public List<Rectangle> wall = new();
+    // Väggar man inte kan klättra på
     public List <Rectangle> block = new();
+    // Tak
     public List <Rectangle> roof = new();
+    // Golv man dör på
     public List <Rectangle> killFloor = new();
     
     public Level1()

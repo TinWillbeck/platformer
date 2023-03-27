@@ -5,11 +5,17 @@ public class testlvl
 {
     // Använder mig av listor för att jag vet ej hur många ojbekt jag vill ha i varje level, darför fungerar lisot bättre
 
+    // Golv
     public List<Rectangle> structure = new();
+    // Teleports
     public List<Rectangle> teleport = new();
+    // Väggar man kan klättra på
     public List<Rectangle> wall = new();
+    // Väggar man inte kan klättra på
     public List <Rectangle> block = new();
+    // Tak
     public List <Rectangle> roof = new();
+    // Golv man dör på
     public List <Rectangle> killFloor = new();
 
     public testlvl(){
@@ -37,31 +43,40 @@ public class testlvl
 
 // Level template:
 
+// using System;
 // using Raylib_cs;
 
-// public class levelx
+// public class testlvl
 // {
+//     // Använder mig av listor för att jag vet ej hur många ojbekt jag vill ha i varje level, darför fungerar lisot bättre
+
+//     // Golv
 //     public List<Rectangle> structure = new();
+//     // Teleports
 //     public List<Rectangle> teleport = new();
+//     // Väggar man kan klättra på
 //     public List<Rectangle> wall = new();
+//     // Väggar man inte kan klättra på
 //     public List <Rectangle> block = new();
+//     // Tak
 //     public List <Rectangle> roof = new();
+//     // Golv man dör på
 //     public List <Rectangle> killFloor = new();
 
-//     public levelx(){
+//     public testlvl(){
 //         // Golvet
-
+//
 //         // Plattformer
-
+//
 //         // Tak
-
+// 
 //         // Väggar
-
+//
 //         // Block
-
+//
 //         // Killfloor (Golv som TPar spelaren till början av leveln)
-
-//         // Teleport(duh)
-        
+//
+//         // Teleport
+//         teleport.Add(new Rectangle (1400,600, 100,100));
 //     }
 // }

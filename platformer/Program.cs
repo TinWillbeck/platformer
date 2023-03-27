@@ -11,7 +11,7 @@ Level1 level1 = new();
 Level2 level2 = new();
 Level3 level3 = new();
 
-string currentScene = "level3";
+string currentScene = "level2";
 
 float speed = 10;
 float jump = -8.5f;
@@ -72,8 +72,8 @@ while(Raylib.WindowShouldClose()==false)
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Hoppa när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
-        Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
 
+        Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
         (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
         (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "endScreen", level2.killFloor);
@@ -153,7 +153,7 @@ static (Rectangle, float) Movement(Rectangle player, bool isTouching, float spee
 
     // gör så spelaren kan hoppa om den trycker på W/space
     // gör direkt så isTouching är falskt för att annars fungerade det inte utan att spelaren TPades uppåt.
-    if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && isTouching == true)
+    if (Raylib.IsKeyDown(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && isTouching == true)
     {   
         isTouching = false;
         velocity = jump;
@@ -230,10 +230,6 @@ static (Rectangle, bool) ActiveCollision(Rectangle player, bool isTouching, List
             if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
             {
                 player.x -= speed;
-            }
-            if (Raylib.IsKeyPressed(KeyboardKey.KEY_W) || Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
-            {   
-                player.y -= 70;
             }
         }
     }

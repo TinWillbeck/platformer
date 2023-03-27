@@ -5,11 +5,17 @@ public class Level3
 {
     // Använder mig av listor för att jag vet ej hur många ojbekt jag vill ha i varje level, darför fungerar lisot bättre
 
+    // Golv
     public List<Rectangle> structure = new();
+    // Teleports
     public List<Rectangle> teleport = new();
+    // Väggar man kan klättra på
     public List<Rectangle> wall = new();
+    // Väggar man inte kan klättra på
     public List <Rectangle> block = new();
+    // Tak
     public List <Rectangle> roof = new();
+    // Golv man dör på
     public List <Rectangle> killFloor = new();
 
     public Level3(){
@@ -28,7 +34,7 @@ public class Level3
         wall.Add(new Rectangle(200,310,100,390));
         wall.Add(new Rectangle(400,200,300,140));
         wall.Add(new Rectangle(800,350,100,200));
-        // Block
+        // Blockd
         block.Add(new Rectangle(400, 510, 300, 190));
         block.Add(new Rectangle(400, 0, 300, 200));
         block.Add(new Rectangle(800, 160, 100, 190));
