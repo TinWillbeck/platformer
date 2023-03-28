@@ -1,18 +1,23 @@
 ﻿using Raylib_cs;
 
+// öppna förnstrer och sätt fps
 Raylib.InitWindow(1500,800, "platformer");
 Raylib.SetTargetFPS(60);
 
+// skapa spelaren och isTouching
 Rectangle player = new Rectangle(60,660, 60,65);
 bool isTouching = false;
 
+// skapa instanser av levlarna
 testlvl testlvl = new();
 Level1 level1 = new();
 Level2 level2 = new();
 Level3 level3 = new();
 
-string currentScene = "level2";
+// skapa currenScene och sätt till start
+string currentScene = "level1";
 
+// skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
 float jump = -8.5f;
 float velocity = 0;
@@ -43,9 +48,11 @@ while(Raylib.WindowShouldClose()==false)
 
     // Rita test level som jag använde för att prova fysiken bland annat
     else if (currentScene == "test"){
+        // rita ut spelaren, leveln och eventuell text
         Raylib.DrawRectangleRec(player, Color.WHITE);
         DrawLevel(testlvl.structure, testlvl.teleport, testlvl.wall, testlvl.block, testlvl.roof,testlvl.killFloor);
 
+        // kolla efter kollision
         (player, isTouching) = ActiveCollision(player, isTouching, testlvl.structure, testlvl.wall, gravity, speed, velocity);
         (player, velocity) = StaticCollision(player, testlvl.block, testlvl.roof, speed, velocity);
         (player, currentScene) = tpCollision(player, testlvl.teleport, currentScene, "start", testlvl.killFloor);
@@ -61,6 +68,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawText("Använd W/space, A, D för att flytta den vita kuben.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Ta dig till gröna kuben för att gå till nästa nivå.", 110, 150, 26, Color.WHITE);
 
+        (player, velocity) = StaticCollision(player, level1.block, level1.roof, speed, velocity);
         (player, isTouching) = ActiveCollision(player, isTouching, level1.structure, level1.wall, gravity, speed, velocity);
         (player, currentScene) = tpCollision(player, level1.teleport, currentScene, "level2", level1.killFloor);
     }
@@ -76,7 +84,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
         (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
-        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "endScreen", level2.killFloor);
+        (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "level3", level2.killFloor);
     }
     // Rita level 3
     else if (currentScene == "level3")

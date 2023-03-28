@@ -23,7 +23,7 @@ public class Level2
     public Level2()
     {
         // Golvet
-        structure.Add(new Rectangle(0, 700, 1500, 100)); 
+        structure.Add(new Rectangle(0, 700, 700, 100)); 
         structure.Add(new Rectangle(300, 600, 300, 100)); 
 
         // Plattformer
@@ -39,7 +39,7 @@ public class Level2
         // Block
         block.Add(new Rectangle(400, 0, 100, 490));
         // Killfloor (Golv som TPar spelaren till början av leveln)
-
+        killFloor.Add(new Rectangle(700, 700,800, 100 ));
         // Teleport
         teleport.Add(new Rectangle (1400,100, 100,100));
     }
