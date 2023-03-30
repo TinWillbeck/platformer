@@ -15,7 +15,7 @@ Level2 level2 = new();
 Level3 level3 = new();
 
 // skapa currenScene och sätt till start
-string currentScene = "start";
+string currentScene = "end";
 
 // skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
@@ -42,6 +42,7 @@ while(Raylib.WindowShouldClose()==false)
     // Rita slut scen
     else if (currentScene == "endScreen"){
         Raylib.DrawText("GG hoppas jag får godkänt!", 550,300,32,Color.WHITE);
+        Raylib.DrawText("Klicka på ENTER för att starta om", 500, 400, 24, Color.WHITE);
         Raylib.ClearBackground(Color.BLACK);
 
     }
@@ -105,6 +106,12 @@ while(Raylib.WindowShouldClose()==false)
         if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
         {
             currentScene = "level1";
+        }
+    }
+    else if (currentScene == "endScreen"){
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_ENTER))
+        {
+            currentScene = "start";
         }
     }
     else
