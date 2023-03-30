@@ -15,7 +15,7 @@ Level2 level2 = new();
 Level3 level3 = new();
 
 // skapa currenScene och sätt till start
-string currentScene = "level1";
+string currentScene = "start";
 
 // skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
@@ -80,8 +80,8 @@ while(Raylib.WindowShouldClose()==false)
         DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Hoppa när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
+        Raylib.DrawText("Akta dig för lava!", 900, 725, 26, Color.WHITE);
 
-        Raylib.DrawText("Akta dig för lava!", 450, 725, 26, Color.WHITE);
         (player, isTouching) = ActiveCollision(player, isTouching, level2.structure, level2.wall, gravity, speed, velocity);
         (player, velocity) = StaticCollision(player, level2.block, level2.roof, speed, velocity);
         (player, currentScene) = tpCollision(player, level2.teleport, currentScene, "level3", level2.killFloor);
