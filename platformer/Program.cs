@@ -268,8 +268,7 @@ static (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block
     {
         if (Raylib.CheckCollisionRecs(player, roof[i]))
         {
-            player.y = roof[i].y + 10;
-            velocity = 0;
+            velocity = 0.6f;
         }
     }
     return (player, velocity);
