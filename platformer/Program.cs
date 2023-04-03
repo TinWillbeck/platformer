@@ -17,6 +17,7 @@ DrawLevelClass drawlevel = new();
 ActiveCollisionClass activeCollision = new();
 TpCollisionClass tpCollision = new();
 StaticCollisionClass staticCollision = new();
+MovementClass movement = new();
 
 // skapa currenScene och sätt till start
 string currentScene = "start";
@@ -120,67 +121,12 @@ while(Raylib.WindowShouldClose()==false)
     }
     else
     {
-        (player, velocity) = Movement(player, isTouching, speed, jump, velocity, gravity);
+        (player, velocity) = movement.Movement(player, isTouching, speed, jump, velocity, gravity);
     }
 
     
 }
 
-
-// metoder
-
 // IDE FÖR MJUKARE HOPP
 // Gör så gravitationen ökar exponentiellt när karaktären är i luften
 // Gör så man får en spurt uppåt när man trycker på W/ space(vector2 på nnågot vis)
-
-
-
-
-// Gör så spelaren kan röra på sig
-static (Rectangle, float) Movement(Rectangle player, bool isTouching, float speed, float jump, float velocity, float gravity)
-{
-
-    // gör så spelaren kan hoppa om den trycker på W/space
-    // gör direkt så isTouching är falskt för att annars fungerade det inte utan att spelaren TPades uppåt.
-    if (Raylib.IsKeyDown(KeyboardKey.KEY_W) && isTouching == true || Raylib.IsKeyDown(KeyboardKey.KEY_SPACE) && isTouching == true)
-    {   
-        isTouching = false;
-        velocity = jump;
-    }
-    // spelaren kan gå åt vänster
-    if (Raylib.IsKeyDown(KeyboardKey.KEY_A))
-    {
-        player.x -= speed;
-    }
-    // spelaren kan gå åt höger
-    if (Raylib.IsKeyDown(KeyboardKey.KEY_D))
-    {
-        player.x += speed;
-    }
-    // spelaren kan TPa till början av leveln
-    if (Raylib.IsKeyDown(KeyboardKey.KEY_R))
-    {
-        player.x = 60;
-        player.y = 660;
-    }
-
-    // Gör hoppen mjukare
-    velocity += gravity;
-    player.y += velocity;
-    if (isTouching == true)
-    {
-        velocity = 0;
-    }
-
-    // gör så spelaren inte kan gå utanför leveln
-    if (player.x <= -10)
-    {
-        player.x += speed;
-    }
-    if (player.x >= 1450)
-    {
-        player.x -= speed;
-    }
-
-    return (player, velocity);
-}
