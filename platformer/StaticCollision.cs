@@ -4,7 +4,7 @@ using Raylib_cs;
 
 public class StaticCollisionClass
 {
-        // Kollision där spelaren inte får förmågan att hoppa
+    // Kollision där spelaren inte får förmågan att hoppa
     public (Rectangle,float) StaticCollision(Rectangle player, List<Rectangle> block, List<Rectangle> roof, float speed, float velocity)
     {
         // Kollision för väggar

@@ -5,7 +5,6 @@ public class ActiveCollisionClass
 {
     // Aktiv kollision som jag har kallat det innebär att när spelaren nuddar detta objekt så har den förmågan att hoppa. 
     // Detta kollas med boolen isTouching som är sann om spelaren nuddar något av objekten i listan.
-
     public (Rectangle, bool) ActiveCollision(Rectangle player, bool isTouching, List<Rectangle> structure, List<Rectangle> wall, float gravity, float speed, float velocity)
     {
         isTouching = false;
