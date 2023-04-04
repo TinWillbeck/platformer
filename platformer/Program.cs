@@ -13,6 +13,7 @@ testlvl testlvl = new();
 Level1 level1 = new();
 Level2 level2 = new();
 Level3 level3 = new();
+Level4 level4 = new();
 DrawLevelClass drawlevel = new();
 ActiveCollisionClass activeCollision = new();
 TpCollisionClass tpCollision = new();
@@ -20,7 +21,7 @@ StaticCollisionClass staticCollision = new();
 MovementClass movement = new();
 
 // skapa currenScene och sätt till start
-string currentScene = "start";
+string currentScene = "level4";
 
 // skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
@@ -100,7 +101,16 @@ while(Raylib.WindowShouldClose()==false)
 
         (player, isTouching) = activeCollision.ActiveCollision(player, isTouching, level3.structure, level3.wall, gravity, speed, velocity);
         (player, velocity) = staticCollision.StaticCollision(player, level3.block, level3.roof, speed, velocity);
-        (player, currentScene) = tpCollision.TpCollision(player, level3.teleport, currentScene, "endScreen", level3.killFloor);
+        (player, currentScene) = tpCollision.TpCollision(player, level3.teleport, currentScene, "level4", level3.killFloor);
+    }
+    else if (currentScene == "level4")
+    {
+        Raylib.DrawRectangleRec(player,Color.WHITE);
+        drawlevel.DrawLevel(level4.structure, level4.teleport, level4.wall,level4.block,level4.roof,level4.killFloor);
+
+        (player, isTouching) = activeCollision.ActiveCollision(player, isTouching, level4.structure, level4.wall, gravity, speed, velocity);
+        (player, velocity) = staticCollision.StaticCollision(player, level4.block, level4.roof, speed, velocity);
+        (player, currentScene) = tpCollision.TpCollision(player, level4.teleport, currentScene, "endScreen", level4.killFloor);
     }
 
     Raylib.EndDrawing();
