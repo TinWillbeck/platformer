@@ -23,6 +23,10 @@ public class TpCollisionClass
                 player.y = 660;
             }
         }
+        // Man kan trycka på T när man spelar för att byta till testbanan, används i demosyfte
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_T)){
+            currentScene = "test";
+        }
         return(player, currentScene);
     }
 
