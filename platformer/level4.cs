@@ -28,11 +28,16 @@ public class Level4
         structure.Add(new Rectangle(600, 500, 100,10));
         structure.Add(new Rectangle(300, 350, 100,10));
         structure.Add(new Rectangle(600, 250, 100,10));
+        structure.Add(new Rectangle(900, 200, 100,10));
         // Tak
         roof.Add(new Rectangle(300,240,100,10));
         roof.Add(new Rectangle(900,610,100,10));
         roof.Add(new Rectangle(600,510,100,10));
-        roof.Add(new Rectangle(600,170,100,10));
+        roof.Add(new Rectangle(600,150,100,10));
+        roof.Add(new Rectangle(900,100,100,10));
+        roof.Add(new Rectangle(600,360,100,10));
+        roof.Add(new Rectangle(900,310,100,10));
+        roof.Add(new Rectangle(300,460,100,10));
         // Väggar
 
         // Block
@@ -40,6 +45,9 @@ public class Level4
         block.Add(new Rectangle(300,360,100,100));
         block.Add(new Rectangle(300,0,100,240));
         block.Add(new Rectangle(600,260,100,100));
+        block.Add(new Rectangle(600,0,100,150));
+        block.Add(new Rectangle(900,210,100,100));
+        block.Add(new Rectangle(900,0,100,100));
         // Killfloor (Golv som TPar spelaren till början av leveln)
          killFloor.Add(new Rectangle(200,750,600,100));       
         // Teleport
