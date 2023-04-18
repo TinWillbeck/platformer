@@ -21,7 +21,7 @@ StaticCollisionClass staticCollision = new();
 MovementClass movement = new();
 
 // skapa currenScene och sätt till start
-string currentScene = "start";
+string currentScene = "level2";
 
 // skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
@@ -72,6 +72,7 @@ while(Raylib.WindowShouldClose()==false)
         Raylib.DrawRectangleRec(player, Color.WHITE);
         
         drawlevel.DrawLevel(level1.structure, level1.teleport, level1.wall, level1.block,level1.roof,level1.killFloor);
+        Raylib.DrawRectangle(90,90,700,100, Color.DARKGRAY);
         Raylib.DrawText("Använd W/space, A, D för att flytta den vita kuben.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Ta dig till gröna kuben för att gå till nästa nivå.", 110, 150, 26, Color.WHITE);
 
@@ -85,6 +86,8 @@ while(Raylib.WindowShouldClose()==false)
     {
         Raylib.DrawRectangleRec(player, Color.WHITE);
         drawlevel.DrawLevel(level2.structure, level2.teleport, level2.wall, level2.block, level2.roof,level2.killFloor);
+        Raylib.DrawRectangle(90,90,930,100, Color.DARKGRAY);
+        Raylib.DrawRectangle(890,715,250,50, Color.DARKGRAY);
         Raylib.DrawText("Håll A eller D mot lila väggar för att glida ner för dem.", 100, 100, 26, Color.WHITE);
         Raylib.DrawText("Hoppa när du är i kontakt med en lila vägg för att klättra upp för den", 100, 150, 26, Color.WHITE);
         Raylib.DrawText("Akta dig för lava!", 900, 725, 26, Color.WHITE);
