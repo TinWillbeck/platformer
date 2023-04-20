@@ -21,7 +21,7 @@ StaticCollisionClass staticCollision = new();
 MovementClass movement = new();
 
 // skapa currenScene och sätt till start
-string currentScene = "level2";
+string currentScene = "start";
 
 // skapa alla variabler som har med spelarens rörelse att göra
 float speed = 10;
